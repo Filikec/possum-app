@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Possum</string>
+    <string name="api_token">AAAAAAAAAAAAAAAAAAAAAHuxiQEAAAAAJQ2DaWAdE4EXa0AvqTg2aTRYMbw%3DmVgDcRV6llKuWTx8plwGkZDOHoLFEaGFYR3VWoCSho4qJY1Fzi</string>
+    <string name="channel_name">Possum notifications</string>
+    <string name="channel_description">Channel for possums only!</string>
+    <string name="update_lock_wallpaper">Update lockscreen...........</string>
+    <string name="update_system_wallpaper">Update homescreen...........</string>
+    <string name="active">Active.....................</string>
+    <string name="scale_imgs">Scale images................</string>
+    <string name="possum_good">Possums are being downloaded! This is so cool!</string>
+    <string name="possum_bad">No possums are being downloaded. This is so sad. I am crying…</string>
+    <string name="updated">Last updated:%1$s</string>
+    <string name="twitter_account_link">https://api.twitter.com/2/tweets/search/recent?query=from:PossumEveryHour</string>
+    <string name="alarm_changed_channel_name">Possum alert channel</string>
+    <string name="alarm_changed_channel_description">Channel for possum alarms</string>
+    <string name="alarm_changed_text">Possums are not being downloaded!</string>
+    <string name="save_possum">Save possum</string>
+    <string name="update_now">Update</string>
+    <string name="possum">POSSUM</string>
+    <string name="description">TODO</string>
+</resources>
