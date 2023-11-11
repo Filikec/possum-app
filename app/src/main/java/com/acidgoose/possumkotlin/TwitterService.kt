@@ -177,8 +177,8 @@ class TwitterService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         setAlarm()
         updateWallpaper(this)
-        stopSelf()
         stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf()
         return super.onStartCommand(intent, flags, startId)
     }
 
