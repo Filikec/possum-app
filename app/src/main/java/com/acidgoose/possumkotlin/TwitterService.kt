@@ -168,7 +168,7 @@ class TwitterService : Service() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Possums are being downloaded!")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT).build()
+            .setPriority(NotificationCompat.PRIORITY_LOW).build()
 
         (getSystemService(NOTIFICATION_SERVICE) as? NotificationManager)?.notify(NOTIFICATION_ID,notification)
         startForeground(NOTIFICATION_ID,notification)
@@ -178,6 +178,7 @@ class TwitterService : Service() {
         setAlarm()
         updateWallpaper(this)
         stopSelf()
+        stopForeground(STOP_FOREGROUND_REMOVE)
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -192,7 +193,16 @@ class TwitterService : Service() {
      * Create the notification channel
      */
     private fun createChannel(){
-
+        val name = getString(R.string.channel_name)
+        val descriptionText = getString(R.string.channel_description)
+        val importance = NotificationManager.IMPORTANCE_LOW
+        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            description = descriptionText
+        }
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+        notificationManager.createNotificationChannel(channel)
     }
 
 
