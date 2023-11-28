@@ -5,7 +5,7 @@
     <string name="channel_description">Channel for possums only!</string>
     <string name="update_lock_wallpaper">Update lockscreen...........</string>
     <string name="update_system_wallpaper">Update homescreen...........</string>
-    <string name="active">Active.....................</string>
+    <string name="active">Active......................</string>
     <string name="scale_imgs">Scale images................</string>
     <string name="possum_good">Possums are being downloaded! This is so cool!</string>
     <string name="possum_bad">No possums are being downloaded. This is so sad. I am crying…</string>
@@ -18,4 +18,8 @@
     <string name="update_now">Update</string>
     <string name="possum">POSSUM</string>
     <string name="description">TODO</string>
+    <string name="info_lockscreen">Update changes locksreen....</string>
+    <string name="info_homescreen">Update changes homescreen...</string>
+    <string name="info_scale">Scales images to fit........</string>
+    <string name="info_active">Updates every hour..........</string>
 </resources>

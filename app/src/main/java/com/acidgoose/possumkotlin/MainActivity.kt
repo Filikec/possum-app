@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
@@ -96,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         keepUpdatingUI()
     }
 
+
     private fun loadProperties(){
         updated = findViewById(R.id.updateTime)
         switchActive = findViewById(R.id.active)
@@ -118,7 +120,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         help.setOnClickListener{b ->
-            Log.d("help","presesd")
+            val lock = findViewById<TextView>(R.id.updateLock)
+            val home = findViewById<TextView>(R.id.updateSys)
+            val scale = findViewById<TextView>(R.id.scaleImg)
+            val active = findViewById<TextView>(R.id.active)
+
+            if (lock.text == getString(R.string.update_lock_wallpaper)){
+                lock.text = getString(R.string.info_lockscreen)
+                home.text = getString(R.string.info_homescreen)
+                scale.text = getString(R.string.info_scale)
+                active.text = getString(R.string.info_active)
+            }else{
+                lock.text = getString(R.string.update_lock_wallpaper)
+                home.text = getString(R.string.update_system_wallpaper)
+                scale.text = getString(R.string.scale_imgs)
+                active.text = getString(R.string.active)
+            }
+
+
         }
 
         switchSys.setOnCheckedChangeListener{_,b->
