@@ -6,13 +6,9 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.*
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.WindowManager
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.scale
 import kotlinx.coroutines.CoroutineScope
@@ -158,7 +154,7 @@ suspend fun storeImage(context: Context, image : Bitmap?){
  * Foreground service that sets the wallpaper on start command
  * This is done periodically every hour
  */
-class TwitterService : Service() {
+class WallpaperService : Service() {
 
     override fun onCreate() {
         super.onCreate()
@@ -168,7 +164,8 @@ class TwitterService : Service() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Possums are being downloaded!")
-            .setPriority(NotificationCompat.PRIORITY_LOW).build()
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setSmallIcon(R.drawable.ic_possum_notification).build()
 
         (getSystemService(NOTIFICATION_SERVICE) as? NotificationManager)?.notify(NOTIFICATION_ID,notification)
         startForeground(NOTIFICATION_ID,notification)
@@ -213,7 +210,7 @@ class TwitterService : Service() {
         //AppLog.write("Setting alarm",this)
 
         val alarmDownloadIntent = PendingIntent.getForegroundService(this, START_ALARM_REQUEST,
-            Intent(this,TwitterService::class.java),PendingIntent.FLAG_IMMUTABLE)
+            Intent(this,WallpaperService::class.java),PendingIntent.FLAG_IMMUTABLE)
 
         val alarmManager =
             this.getSystemService(Context.ALARM_SERVICE) as? AlarmManager

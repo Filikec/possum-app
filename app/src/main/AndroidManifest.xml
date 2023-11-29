@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -24,7 +23,7 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <receiver
-            android:name=".AlarmChangedReceiver"
+            android:name="com.acidgoose.possumkotlin.AlarmChangedReceiver"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
@@ -35,12 +34,14 @@
         </receiver>
 
         <service
-            android:name=".TwitterService"
+            android:name="com.acidgoose.possumkotlin.WallpaperService"
             android:enabled="true" />
 
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name="com.acidgoose.possumkotlin.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

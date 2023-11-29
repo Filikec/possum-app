@@ -9,10 +9,6 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,7 +25,6 @@ import java.io.OutputStream
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 const val PREF_LOCK = "updateLock"
@@ -107,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         help = findViewById(R.id.helpButton)
 
         active = (PendingIntent.getForegroundService(this, START_ALARM_REQUEST,
-            Intent(this,TwitterService::class.java),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE) != null)
+            Intent(this,WallpaperService::class.java),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE) != null)
 
         pref = getSharedPreferences(PREF,MODE_PRIVATE)
     }
@@ -119,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             }.apply()
         }
 
-        help.setOnClickListener{b ->
+        help.setOnClickListener{
             val lock = findViewById<TextView>(R.id.updateLock)
             val home = findViewById<TextView>(R.id.updateSys)
             val scale = findViewById<TextView>(R.id.scaleImg)
@@ -136,8 +131,6 @@ class MainActivity : AppCompatActivity() {
                 scale.text = getString(R.string.scale_imgs)
                 active.text = getString(R.string.active)
             }
-
-
         }
 
         switchSys.setOnCheckedChangeListener{_,b->
@@ -160,13 +153,13 @@ class MainActivity : AppCompatActivity() {
             if (b && !active){
                 pref.edit().putBoolean(PREF_ALERTED,false).apply()
 
-                startForegroundService(Intent(this,TwitterService::class.java))
+                startForegroundService(Intent(this,WallpaperService::class.java))
             }else if (!b){
                 val alarmManager =
                     this.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
 
                 val alarmDownloadIntent = PendingIntent.getForegroundService(this, START_ALARM_REQUEST,
-                    Intent(this,TwitterService::class.java),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
+                    Intent(this,WallpaperService::class.java),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
 
                 alarmManager?.cancel(alarmDownloadIntent)
                 alarmDownloadIntent.cancel()

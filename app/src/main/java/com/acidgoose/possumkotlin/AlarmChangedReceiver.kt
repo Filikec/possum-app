@@ -33,7 +33,8 @@ class AlarmChangedReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(context.getString(R.string.alarm_changed_text))
             .setContentIntent(PendingIntent.getActivity(context,0,Intent(context,MainActivity::class.java),PendingIntent.FLAG_IMMUTABLE))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT).build()
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setSmallIcon(R.drawable.ic_possum_notification).build()
 
         (context.getSystemService(Service.NOTIFICATION_SERVICE) as? NotificationManager)?.notify(NOTIFICATION_ID,notification)
 
@@ -47,7 +48,7 @@ class AlarmChangedReceiver : BroadcastReceiver() {
         return (PendingIntent.getForegroundService(
             context,
             START_ALARM_REQUEST,
-            Intent(context, TwitterService::class.java),
+            Intent(context, WallpaperService::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
         ) != null)
     }
