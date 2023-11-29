@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -24,9 +25,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.OutputStream
+import java.security.Permission
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.jar.Manifest
 
 
 const val PREF_LOCK = "updateLock"
@@ -58,6 +61,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+
+            } else {
+            }
+        }
+
 
     private lateinit var switchLock : SwitchCompat
     private lateinit var switchSys : SwitchCompat
@@ -92,6 +106,10 @@ class MainActivity : AppCompatActivity() {
 
         updateTime()
         keepUpdatingUI()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 
 
