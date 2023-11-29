@@ -2,8 +2,10 @@ package com.acidgoose.possumkotlin
 
 import android.app.Activity
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -170,15 +172,30 @@ class MainActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.save).setOnClickListener{
-            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "image/jpeg"
-                putExtra(Intent.EXTRA_TITLE, "possum.jpg")
+
+            if (File(filesDir, LAST_POSSUM).exists()){
+                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "image/jpeg"
+                    putExtra(Intent.EXTRA_TITLE, "possum.jpg")
+                }
+                createImage.launch(intent)
+            }else{
+                showAlert(this,"No image", "No image downloaded yet")
             }
-            createImage.launch(intent)
+
         }
 
 
+    }
+
+    private fun showAlert(context: Context?, title: String?, message: String?) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK") { b, _ ->
+                b.dismiss()
+            }.show()
     }
 
     /**
