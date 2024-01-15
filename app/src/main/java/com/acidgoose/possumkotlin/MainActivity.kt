@@ -5,13 +5,15 @@ import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,11 +27,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.OutputStream
-import java.security.Permission
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.jar.Manifest
 
 
 const val PREF_LOCK = "updateLock"
@@ -39,6 +39,7 @@ const val PREF_UPDATE_TIME = "lastUpdate"
 const val PREF_ALERTED = "alerted"
 const val PREF_SCALE = "scale"
 const val PREF = "preferences"
+const val PREF_NOTIFICATION = "notificationPermission"
 
 
 class MainActivity : AppCompatActivity() {
@@ -62,13 +63,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    val requestPermissionLauncher =
+    private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
-            if (isGranted) {
+            if (!isGranted && pref.getBoolean(PREF_NOTIFICATION,true)) {
+                showAlert(this,"No notification permission", "Sometimes the operating system disables background apps without warning! This may allow you to get a notification when that happens!")
+                    .setNegativeButton("I don't care"){ _, _ ->
+                        pref.edit().putBoolean(PREF_NOTIFICATION,false).apply()
 
-            } else {
+                    }.setPositiveButton("OK") { _, _ ->
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri: Uri = Uri.fromParts("package", packageName, null)
+                        intent.data = uri
+                        startActivity(intent)
+                    }.show()
             }
         }
 
@@ -104,11 +113,16 @@ class MainActivity : AppCompatActivity() {
         switchSys.isChecked = pref.getBoolean(PREF_SYS,false)
         switchScale.isChecked = pref.getBoolean(PREF_SCALE,false)
 
+
         updateTime()
         keepUpdatingUI()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            Log.d("Notification", pref.getBoolean(PREF_NOTIFICATION,true).toString())
+            if (pref.getBoolean(PREF_NOTIFICATION,true)){
+                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+
         }
     }
 
@@ -200,20 +214,19 @@ class MainActivity : AppCompatActivity() {
                 createImage.launch(intent)
             }else{
                 showAlert(this,"No image", "No image downloaded yet")
+                    .setPositiveButton("OK") { b, _ ->
+                    b.dismiss()
+                }.show()
             }
 
         }
-
-
     }
 
-    private fun showAlert(context: Context?, title: String?, message: String?) {
+    private fun  showAlert(context: Context?, title: String?, message: String?) : AlertDialog.Builder {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         builder.setTitle(title)
             .setMessage(message)
-            .setPositiveButton("OK") { b, _ ->
-                b.dismiss()
-            }.show()
+        return builder
     }
 
     /**
