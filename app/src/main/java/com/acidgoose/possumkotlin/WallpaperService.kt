@@ -19,6 +19,8 @@ import java.io.File
 import java.io.InputStream
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
+import androidx.core.content.edit
+import androidx.core.graphics.createBitmap
 
 const val CHANNEL_ID = "POSSUM"
 const val NOTIFICATION_ID = 1
@@ -32,12 +34,17 @@ fun updateWallpaper(context : Context){
     //AppLog.write("Updated function started",context)
 
     CoroutineScope(Dispatchers.IO).launch {
-        context.getSharedPreferences(PREF, Service.MODE_PRIVATE).edit().putLong(PREF_UPDATE_TIME,System.currentTimeMillis()).apply()
+        context.getSharedPreferences(PREF, Service.MODE_PRIVATE).edit {
+            putLong(
+                PREF_UPDATE_TIME,
+                System.currentTimeMillis()
+            )
+        }
 
         val wakeLock: PowerManager.WakeLock =
             (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                 newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Possum::WallpaperUpdate").apply {
-                    acquire()
+                    acquire(10*60*1000L /*10 minutes*/)
                 }
             }
 
@@ -67,7 +74,7 @@ fun updateWallpaper(context : Context){
                 Log.d("Resize","Image: " + screenWidth + " " + scaledHeight)
                 scaledImage = image.scale(screenWidth,scaledHeight)
 
-                val newBitmap = Bitmap.createBitmap(screenWidth,screenHeight,Bitmap.Config.ARGB_8888)
+                val newBitmap = createBitmap(screenWidth, screenHeight)
                 val canvas = Canvas(newBitmap)
                 canvas.drawColor(Color.BLACK)
 

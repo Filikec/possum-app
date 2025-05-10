@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_possum_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
-        tools:targetApi="33">
+        tools:targetApi="34">
         <receiver
             android:name="com.acidgoose.possumkotlin.AlarmChangedReceiver"
             android:enabled="true"
@@ -35,12 +35,12 @@
 
         <service
             android:name="com.acidgoose.possumkotlin.WallpaperService"
+            android:foregroundServiceType="dataSync"
             android:enabled="true" />
 
         <activity
             android:name="com.acidgoose.possumkotlin.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

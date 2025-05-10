@@ -20,7 +20,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +29,7 @@ import java.io.OutputStream
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import androidx.core.content.edit
 
 
 const val PREF_LOCK = "updateLock"
@@ -50,14 +50,14 @@ class MainActivity : AppCompatActivity() {
 
             CoroutineScope(Dispatchers.IO).launch{
                 val uri = (result.data?.data)!!
-                val out: OutputStream? = contentResolver.openOutputStream(uri)
+                val out: OutputStream = contentResolver.openOutputStream(uri)!!
 
                 val bitmap = BitmapFactory.decodeFile(File(filesDir, LAST_POSSUM).absolutePath)
 
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,out)
 
                 withContext(Dispatchers.IO) {
-                    out?.close()
+                    out.close()
                 }
             }
         }
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             if (!isGranted && pref.getBoolean(PREF_NOTIFICATION,true)) {
                 showAlert(this,"No notification permission", "Sometimes the operating system disables background apps without warning! This may allow you to get a notification when that happens!")
                     .setNegativeButton("I don't care"){ _, _ ->
-                        pref.edit().putBoolean(PREF_NOTIFICATION,false).apply()
+                        pref.edit { putBoolean(PREF_NOTIFICATION, false) }
 
                     }.setPositiveButton("OK") { _, _ ->
                         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -99,7 +99,6 @@ class MainActivity : AppCompatActivity() {
 
         val actionBar: ActionBar? = supportActionBar
         actionBar?.hide()
-        window.statusBarColor = ContextCompat.getColor(this, R.color.PossumBeige)
 
         findViewById<Button>(R.id.update).setOnClickListener{
             updateWallpaper(this)
@@ -143,9 +142,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setOnClickListeners(){
         switchLock.setOnCheckedChangeListener{_,b->
-            pref.edit().apply{
-                putBoolean(PREF_LOCK,b)
-            }.apply()
+            pref.edit {
+                putBoolean(PREF_LOCK, b)
+            }
         }
 
         help.setOnClickListener{
@@ -168,24 +167,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         switchSys.setOnCheckedChangeListener{_,b->
-            pref.edit().apply{
-                putBoolean(PREF_SYS,b)
-            }.apply()
+            pref.edit {
+                putBoolean(PREF_SYS, b)
+            }
         }
 
         switchScale.setOnCheckedChangeListener{_,b->
-            pref.edit().apply{
-                putBoolean(PREF_SCALE,b)
-            }.apply()
+            pref.edit {
+                putBoolean(PREF_SCALE, b)
+            }
         }
 
         switchActive.setOnCheckedChangeListener{_,b->
-            pref.edit().apply{
-                putBoolean(PREF_ACTIVE,b)
-            }.apply()
+            pref.edit {
+                putBoolean(PREF_ACTIVE, b)
+            }
 
             if (b && !active){
-                pref.edit().putBoolean(PREF_ALERTED,false).apply()
+                pref.edit { putBoolean(PREF_ALERTED, false) }
 
                 startForegroundService(Intent(this,WallpaperService::class.java))
             }else if (!b){
