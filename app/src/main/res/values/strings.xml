@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Possum</string>
-    <string name="api_token">AAAAAAAAAAAAAAAAAAAAAHuxiQEAAAAAJQ2DaWAdE4EXa0AvqTg2aTRYMbw%3DmVgDcRV6llKuWTx8plwGkZDOHoLFEaGFYR3VWoCSho4qJY1Fzi</string>
     <string name="channel_name">Possum notifications</string>
     <string name="channel_description">Channel for possums only!</string>
     <string name="update_lock_wallpaper">Update lockscreen...........</string>
